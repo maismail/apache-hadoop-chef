@@ -174,3 +174,9 @@ default['apache_hadoop']['capacity']['default_acl_submit_applications']         
 default['apache_hadoop']['capacity']['default_acl_administer_queue']             ="*"
 default['apache_hadoop']['capacity']['queue_mapping']                            =""
 default['apache_hadoop']['capacity']['queue_mapping_override']['enable']            ="false"
+
+# Kernel tuning
+default['apache_hadoop']['kernel']['swappiness']                 = 1
+default['apache_hadoop']['kernel']['overcommit_memory']          = 1
+default['apache_hadoop']['kernel']['overcommit_ratio']           = 100
+default['apache_hadoop']['kernel']['somaxconn']                  = 1024
