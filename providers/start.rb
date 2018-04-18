@@ -40,7 +40,7 @@ action :format_nn do
       code <<-EOH
         set -e
         #{node['apache_hadoop']['base_dir']}/sbin/format-nn.sh
-        touch #{node['apache_hadoop']['base_dir']}/['nn']_formatted
+        touch #{node['apache_hadoop']['base_dir']}/.nn_formatted
  	EOH
     end
 

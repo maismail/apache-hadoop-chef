@@ -16,7 +16,7 @@ for script in node['apache_hadoop']['nn']['scripts']
     group node['apache_hadoop']['group']
     mode 0775
   end
-end 
+end
 
 Chef::Log.info "NameNode format option: #{node['apache_hadoop']['nn']['format_options']}"
 
@@ -34,7 +34,7 @@ end
 
 activeNN = true
 ha_enabled = false
-if node['apache_hadoop']['ha_enabled'].eql? "true" || node['apache_hadoop']['ha_enabled'] == true # 
+if node['apache_hadoop']['ha_enabled'].eql? "true" || node['apache_hadoop']['ha_enabled'] == true #
   ha_enabled = true
 end
 
@@ -43,7 +43,7 @@ my_ip = my_private_ip()
 # it is ok if all namenodes format the fs. Unless you add a new one later..
 # if the nn has already been formatted, re-formatting it returns error
 # TODO: test if the NameNode is running
-if ::File.exist?("#{node['apache_hadoop']['home']}/['nn']_formatted") === false || "#{node['apache_hadoop']['reformat']}" === "true"
+if ::File.exist?("#{node['apache_hadoop']['home']}/.nn_formatted") === false || "#{node['apache_hadoop']['reformat']}" === "true"
   if activeNN == true
     sleep 10
     if "#{my_ip}" == "#{active_ip}"
@@ -57,7 +57,7 @@ if ::File.exist?("#{node['apache_hadoop']['home']}/['nn']_formatted") === false 
     # TODO - copy fsimage over from the active nn
     sleep 100
   end
-else 
+else
   Chef::Log.info "Not formatting the NameNode. Remove this directory before formatting: (sudo rm -rf #{node['apache_hadoop']['nn']['name_dir']}/current) and set node['apache_hadoop']['reformat'] to true"
 end
 
@@ -97,7 +97,7 @@ if node['apache_hadoop']['systemd'] == "true"
 
   case node['platform_family']
   when "rhel"
-    systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
+    systemd_script = "/usr/lib/systemd/system/#{service_name}.service"
   else
     systemd_script = "/lib/systemd/system/#{service_name}.service"
   end
@@ -134,11 +134,11 @@ end
     owner "root"
     mode 0774
     action :create
-  end 
+  end
 
   apache_hadoop_start "reload_nn" do
     action :systemd_reload
-  end  
+  end
 
 else  #sysv
 
@@ -157,12 +157,12 @@ if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => "#{service_name}")
 end
     notifies :restart, resources(:service => "#{service_name}"), :immediately
-  end 
+  end
 end
 
 
 
-if node['kagent']['enabled'] == "true" 
+if node['kagent']['enabled'] == "true"
   kagent_config "#{service_name}" do
     service "HDFS"
     config_file "#{node['apache_hadoop']['conf_dir']}/hdfs-site.xml"
