@@ -15,13 +15,13 @@
 
 # Variables
 
-START_PROG="<%= node.apache_hadoop.base_dir %>/sbin/start-rm.sh"  
-STOP_PROG="<%= node.apache_hadoop.base_dir %>/sbin/stop-rm.sh"  
+START_PROG="<%= node['apache_hadoop']['base_dir'] %>/sbin/start-rm.sh"  
+STOP_PROG="<%= node['apache_hadoop']['base_dir'] %>/sbin/stop-rm.sh"  
 
-EXEC_WITH_USER="su <%= node.apache_hadoop.yarn.user %> -c"
+EXEC_WITH_USER="su <%= node['apache_hadoop']['yarn']['user'] %> -c"
 
 start() {
-  rm -f <%= node.apache_hadoop.logs_dir %>/hadoop.log
+  rm -f <%= node['apache_hadoop']['logs_dir'] %>/hadoop.log
   ulimit -n 65000 2>&1 > /dev/null
   $EXEC_WITH_USER "$START_PROG"
   return $?
@@ -33,7 +33,7 @@ stop() {
 }
 
 status() {
-  PID_FILE=<%= "#{node.apache_hadoop.logs_dir}" %>/yarn-<%= "#{node.apache_hadoop.yarn.user}" %>-resourcemanager.pid
+  PID_FILE=<%= "#{node['apache_hadoop']['logs_dir']}" %>/yarn-<%= "#{node['apache_hadoop']['yarn']['user']}" %>-resourcemanager.pid
   res=1
   if [ -f $PID_FILE ] ; then
      PID=`cat $PID_FILE`
