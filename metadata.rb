@@ -3,7 +3,7 @@ maintainer       "Jim Dowling"
 maintainer_email "jdowling@kth.se"
 license          "GPL 2.0"
 description      'Installs/Configures the Apache Hadoop distribution'
-long_description IO.read(File.join(File['dir']name(__FILE__), 'README.md'))
+long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "0.1.1"
 source_url       "https://github.com/hopshadoop/apache-hadoop-chef"
 
@@ -185,7 +185,7 @@ attribute "apache_hadoop/capacity/queue_mapping",
 attribute "apache_hadoop/capacity/queue_mapping_override.enable",
           :description => "If a queue mapping is present, will it override the value specified by the user? This can be used by administrators to place jobs in queues that are different than the one specified by the user. The default is false.",
           :type => "string"
-          
+
 attribute "kagent/enabled",
           :description => "Set to 'true' to enable, 'false' to disable kagent",
           :type => "string"
