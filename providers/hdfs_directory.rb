@@ -7,11 +7,11 @@ action :create do
   end
   bash "mk-dir-#{new_resource.name}" do
     user "#{new_resource.owner}"
-    group "#{new_resource['group']}"
+    group "#{new_resource.group}"
     code <<-EOF
      . #{node['apache_hadoop']['base_dir']}/sbin/set-env.sh
      #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -mkdir #{recursive} #{new_resource.name}
-     #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -chgrp #{new_resource['group']} #{new_resource.name}
+     #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -chgrp #{new_resource.group} #{new_resource.name}
      if [ "#{new_resource.mode}" != "" ] ; then
         #{node['apache_hadoop']['base_dir']}/bin/hadoop fs -chmod #{new_resource.mode} #{new_resource.name} 
      fi
@@ -26,13 +26,13 @@ action :put do
 
   bash "hdfs-put-dir-#{new_resource.name}" do
     user "#{new_resource.owner}"
-    group "#{new_resource['group']}"    
+    group "#{new_resource.group}"    
     code <<-EOF
      . #{node['apache_hadoop']['base_dir']}/sbin/set-env.sh
      #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -test -e #{new_resource.dest}
      if [ $? -ne 0 ] ; then
         #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -put #{new_resource.name} #{new_resource.dest}
-        #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -chgrp #{new_resource['group']} #{new_resource.dest}
+        #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -chgrp #{new_resource.group} #{new_resource.dest}
         if [ "#{new_resource.mode}" != "" ] ; then
            #{node['apache_hadoop']['base_dir']}/bin/hadoop fs -chmod #{new_resource.mode} #{new_resource.dest} 
         fi
@@ -55,7 +55,7 @@ action :put_as_superuser do
      if [ $? -ne 0 ] ; then
         #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -put #{new_resource.name} #{new_resource.dest}
         #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -chown #{new_resource.owner} #{new_resource.dest}
-        #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -chgrp #{new_resource['group']} #{new_resource.dest}
+        #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -chgrp #{new_resource.group} #{new_resource.dest}
         if [ "#{new_resource.mode}" != "" ] ; then
            #{node['apache_hadoop']['base_dir']}/bin/hadoop fs -chmod #{new_resource.mode} #{new_resource.dest} 
         fi
@@ -80,7 +80,7 @@ action :create_as_superuser do
      . #{node['apache_hadoop']['base_dir']}/sbin/set-env.sh
      #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -mkdir #{recursive} #{new_resource.name}
      #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -chown #{new_resource.owner} #{new_resource.name}
-     #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -chgrp #{new_resource['group']} #{new_resource.name}
+     #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -chgrp #{new_resource.group} #{new_resource.name}
      if [ "#{new_resource.mode}" != "" ] ; then
         #{node['apache_hadoop']['base_dir']}/bin/hadoop fs -chmod #{new_resource.mode} #{new_resource.name} 
      fi
