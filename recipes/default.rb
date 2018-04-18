@@ -204,7 +204,7 @@ end
 
 
 unless node['apache_hadoop']['yarn'].key?("['nm']['memory_mbs']")
-  mem = (node.memory.total.to_i / 1000)
+  mem = (node['memory']['total'].to_i / 1000)
   if node['apache_hadoop'].key?('yarn') && node['apache_hadoop']['yarn'].key?('memory_percent')
     pct = (node['apache_hadoop']['yarn']['memory_percent'].to_f / 100)
   else
