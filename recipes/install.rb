@@ -197,7 +197,7 @@ directory node['apache_hadoop']['dir'] do
   mode "0775"
   recursive true
   action :create
-  not_if { File['dir']ectory?("#{node['apache_hadoop']['dir']}") }
+  not_if { File.directory?("#{node['apache_hadoop']['dir']}") }
 end
 
 directory node['apache_hadoop']['data_dir'] do
