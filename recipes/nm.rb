@@ -4,17 +4,17 @@ include_recipe "apache_hadoop::yarn"
 yarn_service="nm"
 service_name="nodemanager"
 
-for script in node.apache_hadoop.yarn.scripts
-  template "#{node.apache_hadoop.home}/sbin/#{script}-#{yarn_service}.sh" do
+for script in node['apache_hadoop']['yarn']['scripts']
+  template "#{node['apache_hadoop']['home']}/sbin/#{script}-#{yarn_service}.sh" do
     source "#{script}-#{yarn_service}.sh.erb"
-    owner node.apache_hadoop.yarn.user
-    group node.apache_hadoop.group
+    owner node['apache_hadoop']['yarn']['user']
+    group node['apache_hadoop']['group']
     mode 0775
   end
 end 
 
 
-if node.apache_hadoop.systemd == "true"
+if node['apache_hadoop']['systemd'] == "true"
 
   service service_name do
     provider Chef::Provider::Service::Systemd
@@ -34,7 +34,7 @@ if node.apache_hadoop.systemd == "true"
     owner "root"
     group "root"
     mode 0754
-if node.services.enabled == "true"
+if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => "#{service_name}")
 end
     notifies :start, resources(:service => service_name)
@@ -73,7 +73,7 @@ else #sysv
     owner "root"
     group "root"
     mode 0754
-if node.services.enabled == "true"
+if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => "#{service_name}")
 end
     notifies :restart, resources(:service => service_name)
@@ -81,11 +81,11 @@ end
 
 end
 
-if node.kagent.enabled == "true" 
+if node['kagent']['enabled'] == "true" 
   kagent_config service_name do
     service "YARN"
-    log_file "#{node.apache_hadoop.logs_dir}/yarn-#{node.apache_hadoop.yarn.user}-#{service_name}-#{node.hostname}.log"
-    web_port node.apache_hadoop["#{yarn_service}"][:http_port]
+    log_file "#{node['apache_hadoop']['logs_dir']}/yarn-#{node['apache_hadoop']['yarn']['user']}-#{service_name}-#{node.hostname}['log']"
+    web_port node['apache_hadoop']["#{yarn_service}"][:http_port]
   end
 end
 

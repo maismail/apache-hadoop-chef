@@ -3,7 +3,7 @@ maintainer       "Jim Dowling"
 maintainer_email "jdowling@kth.se"
 license          "GPL 2.0"
 description      'Installs/Configures the Apache Hadoop distribution'
-long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
+long_description IO.read(File.join(File['dir']name(__FILE__), 'README.md'))
 version          "0.1.1"
 source_url       "https://github.com/hopshadoop/apache-hadoop-chef"
 

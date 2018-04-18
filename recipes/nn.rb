@@ -2,31 +2,31 @@
 case node.platform
 when "ubuntu"
  if node.platform_version.to_f <= 14.04
-   node.override.apache_hadoop.systemd = "false"
+   node.override['apache_hadoop']['systemd'] = "false"
  end
 end
 
 private_ip = my_private_ip()
 public_ip = my_public_ip()
 
-for script in node.apache_hadoop.nn.scripts
-  template "#{node.apache_hadoop.home}/sbin/#{script}" do
+for script in node['apache_hadoop']['nn']['scripts']
+  template "#{node['apache_hadoop']['home']}/sbin/#{script}" do
     source "#{script}.erb"
-    owner node.apache_hadoop.hdfs.user
-    group node.apache_hadoop.group
+    owner node['apache_hadoop']['hdfs']['user']
+    group node['apache_hadoop']['group']
     mode 0775
   end
 end 
 
-Chef::Log.info "NameNode format option: #{node.apache_hadoop.nn.format_options}"
+Chef::Log.info "NameNode format option: #{node['apache_hadoop']['nn']['format_options']}"
 
-template "#{node.apache_hadoop.home}/sbin/format-nn.sh" do
+template "#{node['apache_hadoop']['home']}/sbin/format-nn.sh" do
   source "format-nn.sh.erb"
-  owner node.apache_hadoop.hdfs.user
-  group node.apache_hadoop.group
+  owner node['apache_hadoop']['hdfs']['user']
+  group node['apache_hadoop']['group']
   mode 0775
   variables({
-            :format_opts => node.apache_hadoop.nn.format_options
+            :format_opts => node['apache_hadoop']['nn']['format_options']
         })
 end
 
@@ -34,7 +34,7 @@ end
 
 activeNN = true
 ha_enabled = false
-if node.apache_hadoop.ha_enabled.eql? "true" || node.apache_hadoop.ha_enabled == true # 
+if node['apache_hadoop']['ha_enabled'].eql? "true" || node['apache_hadoop']['ha_enabled'] == true # 
   ha_enabled = true
 end
 
@@ -43,7 +43,7 @@ my_ip = my_private_ip()
 # it is ok if all namenodes format the fs. Unless you add a new one later..
 # if the nn has already been formatted, re-formatting it returns error
 # TODO: test if the NameNode is running
-if ::File.exist?("#{node.apache_hadoop.home}/.nn_formatted") === false || "#{node.apache_hadoop.reformat}" === "true"
+if ::File.exist?("#{node['apache_hadoop']['home']}/['nn']_formatted") === false || "#{node['apache_hadoop']['reformat']}" === "true"
   if activeNN == true
     sleep 10
     if "#{my_ip}" == "#{active_ip}"
@@ -58,22 +58,22 @@ if ::File.exist?("#{node.apache_hadoop.home}/.nn_formatted") === false || "#{nod
     sleep 100
   end
 else 
-  Chef::Log.info "Not formatting the NameNode. Remove this directory before formatting: (sudo rm -rf #{node.apache_hadoop.nn.name_dir}/current) and set node.apache_hadoop.reformat to true"
+  Chef::Log.info "Not formatting the NameNode. Remove this directory before formatting: (sudo rm -rf #{node['apache_hadoop']['nn']['name_dir']}/current) and set node['apache_hadoop']['reformat'] to true"
 end
 
 if ha_enabled == true
 
-  template "#{node.apache_hadoop.home}/sbin/start-zkfc.sh" do
+  template "#{node['apache_hadoop']['home']}/sbin/start-zkfc.sh" do
     source "start-zkfc.sh.erb"
-    owner node.apache_hadoop.hdfs.user
-    group node.apache_hadoop.group
+    owner node['apache_hadoop']['hdfs']['user']
+    group node['apache_hadoop']['group']
     mode 0754
   end
 
-  template "#{node.apache_hadoop.home}/sbin/start-standby-nn.sh" do
+  template "#{node['apache_hadoop']['home']}/sbin/start-standby-nn.sh" do
     source "start-standby-nn.sh.erb"
-    owner node.apache_hadoop.hdfs.user
-    group node.apache_hadoop.group
+    owner node['apache_hadoop']['hdfs']['user']
+    group node['apache_hadoop']['group']
     mode 0754
   end
 
@@ -93,7 +93,7 @@ end
 
 service_name="namenode"
 
-if node.apache_hadoop.systemd == "true"
+if node['apache_hadoop']['systemd'] == "true"
 
   case node.platform_family
   when "rhel"
@@ -114,7 +114,7 @@ if node.apache_hadoop.systemd == "true"
     owner "root"
     group "root"
     mode 0754
-if node.services.enabled == "true"
+if node['services']['enabled'] == "true"
     notifies :enable, "service[#{service_name}]"
 end
     notifies :restart, "service[#{service_name}]", :immediately
@@ -153,7 +153,7 @@ else  #sysv
     owner "root"
     group "root"
     mode 0754
-if node.services.enabled == "true"
+if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => "#{service_name}")
 end
     notifies :restart, resources(:service => "#{service_name}"), :immediately
@@ -162,23 +162,23 @@ end
 
 
 
-if node.kagent.enabled == "true" 
+if node['kagent']['enabled'] == "true" 
   kagent_config "#{service_name}" do
     service "HDFS"
-    config_file "#{node.apache_hadoop.conf_dir}/hdfs-site.xml"
-    log_file "#{node.apache_hadoop.logs_dir}/hadoop-#{node.apache_hadoop.hdfs.user}-#{service_name}-#{node.hostname}.log"
-    web_port node.apache_hadoop.nn.http_port
+    config_file "#{node['apache_hadoop']['conf_dir']}/hdfs-site.xml"
+    log_file "#{node['apache_hadoop']['logs_dir']}/hadoop-#{node['apache_hadoop']['hdfs']['user']}-#{service_name}-#{node.hostname}['log']"
+    web_port node['apache_hadoop']['nn']['http_port']
   end
 end
 
-tmp_dirs   = [ "/tmp", node.apache_hadoop.hdfs.user_home, node.apache_hadoop.hdfs.user_home + "/" + node.apache_hadoop.hdfs.user ]
+tmp_dirs   = [ "/tmp", node['apache_hadoop']['hdfs']['user_home'], node['apache_hadoop']['hdfs']['user_home'] + "/" + node['apache_hadoop']['hdfs']['user'] ]
 
 for d in tmp_dirs
   apache_hadoop_hdfs_directory d do
     action :create_as_superuser
-    owner node.apache_hadoop.hdfs.user
-    group node.apache_hadoop.group
+    owner node['apache_hadoop']['hdfs']['user']
+    group node['apache_hadoop']['group']
     mode "1775"
-    not_if ". #{node.apache_hadoop.base_dir}/sbin/set-env.sh && #{node.apache_hadoop.base_dir}/bin/hdfs dfs -test -d #{d}"
+    not_if ". #{node['apache_hadoop']['base_dir']}/sbin/set-env.sh && #{node['apache_hadoop']['base_dir']}/bin/hdfs dfs -test -d #{d}"
   end
 end
