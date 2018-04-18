@@ -2,7 +2,7 @@
 
 command=historyserver
 h=`hostname`
-rootDir=<%= node.apache_hadoop.base_dir %>
+rootDir=<%= node['apache_hadoop']['base_dir'] %>
 bin=`dirname "${BASH_SOURCE-$0}"`
 bin=`cd "$bin"; pwd`
 DEFAULT_LIBEXEC_DIR="$bin"/../libexec
@@ -13,12 +13,12 @@ HADOOP_LIBEXEC_DIR=${HADOOP_LIBEXEC_DIR:-$DEFAULT_LIBEXEC_DIR}
 MRJH=$rootDir/sbin/mr-jobhistory-daemon.sh
 
 echo "Starting $command on ..."
-$MRJH --config $HADOOP_CONF_DIR start $command 
+$MRJH --config $HADOOP_CONF_DIR start $command
 
-sleep 2; head <%= node.apache_hadoop.logs_dir %>/mapred-<%= node.apache_hadoop.mr.user %>-$command-$h.log
+sleep 2; head <%= node['apache_hadoop']['logs_dir'] %>/mapred-<%= node['apache_hadoop']['mr']['user'] %>-$command-$h.log
 
-PID_FILE=/tmp/mapred-<%= node.apache_hadoop.mr.user %>-$command.pid
-PID=`cat $PID_FILE` 
-kill -0 $PID 
+PID_FILE=/tmp/mapred-<%= node['apache_hadoop']['mr']['user'] %>-$command.pid
+PID=`cat $PID_FILE`
+kill -0 $PID
 
 exit $?

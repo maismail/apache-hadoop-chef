@@ -3,10 +3,10 @@
 
 my_ip = my_private_ip()
 
-template "#{node.apache_hadoop.home}/sbin/start-jn.sh" do
+template "#{node['apache_hadoop']['home']}/sbin/start-jn.sh" do
   source "start-jn.sh.erb"
-  owner node.apache_hadoop.hdfs.user
-  group node.apache_hadoop.group
+  owner node['apache_hadoop']['hdfs']['user']
+  group node['apache_hadoop']['group']
   mode 0754
 end
 

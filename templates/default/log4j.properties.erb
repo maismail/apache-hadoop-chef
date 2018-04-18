@@ -26,8 +26,8 @@ log4j.appender.NullAppender=org.apache.log4j.varia.NullAppender
 #
 # Rolling File Appender - cap space usage at 5gb.
 #
-hadoop.log.maxfilesize=<%= node.apache_hadoop.log.maxfilesize %>
-hadoop.log.maxbackupindex=<%= node.apache_hadoop.log.maxbackupindex %>
+hadoop.log.maxfilesize=<%= node['apache_hadoop']['log']['maxfilesize'] %>
+hadoop.log.maxbackupindex=<%= node['apache_hadoop']['log']['maxbackupindex'] %>
 log4j.appender.RFA=org.apache.log4j.RollingFileAppender
 log4j.appender.RFA.File=${hadoop.log.dir}/${hadoop.log.file}
 
@@ -62,7 +62,7 @@ log4j.appender.DRFA.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n
 
 #
 # console
-# Add "console" to rootlogger above if you want to use this 
+# Add "console" to rootlogger above if you want to use this
 #
 
 log4j.appender.console=org.apache.log4j.ConsoleAppender
@@ -101,11 +101,11 @@ log4j.appender.TLA.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n
 #Security appender
 #
 hadoop.security.logger=INFO,NullAppender
-hadoop.security.log.maxfilesize=<%= node.apache_hadoop.log.maxfilesize %>
-hadoop.security.log.maxbackupindex=<%= node.apache_hadoop.log.maxbackupindex %>
+hadoop.security.log.maxfilesize=<%= node['apache_hadoop']['log']['maxfilesize'] %>
+hadoop.security.log.maxbackupindex=<%= node['apache_hadoop']['log']['maxbackupindex'] %>
 log4j.category.SecurityLogger=${hadoop.security.logger}
 hadoop.security.log.file=SecurityAuth-${user.name}.audit
-log4j.appender.RFAS=org.apache.log4j.RollingFileAppender 
+log4j.appender.RFAS=org.apache.log4j.RollingFileAppender
 log4j.appender.RFAS.File=${hadoop.log.dir}/${hadoop.security.log.file}
 log4j.appender.RFAS.layout=org.apache.log4j.PatternLayout
 log4j.appender.RFAS.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n
@@ -115,7 +115,7 @@ log4j.appender.RFAS.MaxBackupIndex=${hadoop.security.log.maxbackupindex}
 #
 # Daily Rolling Security appender
 #
-log4j.appender.DRFAS=org.apache.log4j.DailyRollingFileAppender 
+log4j.appender.DRFAS=org.apache.log4j.DailyRollingFileAppender
 log4j.appender.DRFAS.File=${hadoop.log.dir}/${hadoop.security.log.file}
 log4j.appender.DRFAS.layout=org.apache.log4j.PatternLayout
 log4j.appender.DRFAS.layout.ConversionPattern=%d{ISO8601} %p %c: %m%n
@@ -132,8 +132,8 @@ log4j.appender.DRFAS.DatePattern=.yyyy-MM-dd
 # hdfs audit logging
 #
 hdfs.audit.logger=INFO,NullAppender
-hdfs.audit.log.maxfilesize=<%= node.apache_hadoop.log.maxfilesize %>
-hdfs.audit.log.maxbackupindex=<%= node.apache_hadoop.log.maxbackupindex %>
+hdfs.audit.log.maxfilesize=<%= node['apache_hadoop']['log']['maxfilesize'] %>
+hdfs.audit.log.maxbackupindex=<%= node['apache_hadoop']['log']['maxbackupindex'] %>
 log4j.logger.org.apache.hadoop.hdfs.server.namenode.FSNamesystem.audit=${hdfs.audit.logger}
 log4j.additivity.org.apache.hadoop.hdfs.server.namenode.FSNamesystem.audit=false
 log4j.appender.RFAAUDIT=org.apache.log4j.RollingFileAppender
@@ -147,8 +147,8 @@ log4j.appender.RFAAUDIT.MaxBackupIndex=${hdfs.audit.log.maxbackupindex}
 # mapred audit logging
 #
 mapred.audit.logger=INFO,NullAppender
-mapred.audit.log.maxfilesize=<%= node.apache_hadoop.log.maxfilesize %>
-mapred.audit.log.maxbackupindex=<%= node.apache_hadoop.log.maxbackupindex %>
+mapred.audit.log.maxfilesize=<%= node['apache_hadoop']['log']['maxfilesize'] %>
+mapred.audit.log.maxbackupindex=<%= node['apache_hadoop']['log']['maxbackupindex'] %>
 log4j.logger.org.apache.hadoop.mapred.AuditLogger=${mapred.audit.logger}
 log4j.additivity.org.apache.hadoop.mapred.AuditLogger=false
 log4j.appender.MRAUDIT=org.apache.log4j.RollingFileAppender
@@ -179,16 +179,16 @@ log4j.logger.org.apache.hadoop.fs.s3a.S3AFileSystem=WARN
 log4j.appender.EventCounter=org.apache.hadoop.log.metrics.EventCounter
 
 #
-# Job Summary Appender 
+# Job Summary Appender
 #
-# Use following logger to send summary to separate file defined by 
+# Use following logger to send summary to separate file defined by
 # hadoop.mapreduce.jobsummary.log.file :
 # hadoop.mapreduce.jobsummary.logger=INFO,JSA
-# 
+#
 hadoop.mapreduce.jobsummary.logger=${hadoop.root.logger}
 hadoop.mapreduce.jobsummary.log.file=hadoop-mapreduce.jobsummary.log
-hadoop.mapreduce.jobsummary.log.maxfilesize=<%= node.apache_hadoop.log.maxfilesize %>
-hadoop.mapreduce.jobsummary.log.maxbackupindex=<%= node.apache_hadoop.log.maxbackupindex %>
+hadoop.mapreduce.jobsummary.log.maxfilesize=<%= node['apache_hadoop']['log']['maxfilesize'] %>
+hadoop.mapreduce.jobsummary.log.maxbackupindex=<%= node['apache_hadoop']['log']['maxbackupindex'] %>
 log4j.appender.JSA=org.apache.log4j.RollingFileAppender
 log4j.appender.JSA.File=${hadoop.log.dir}/${hadoop.mapreduce.jobsummary.log.file}
 log4j.appender.JSA.MaxFileSize=${hadoop.mapreduce.jobsummary.log.maxfilesize}
@@ -199,7 +199,7 @@ log4j.logger.org.apache.hadoop.mapred.JobInProgress$JobSummary=${hadoop.mapreduc
 log4j.additivity.org.apache.hadoop.mapred.JobInProgress$JobSummary=false
 
 #
-# Yarn ResourceManager Application Summary Log 
+# Yarn ResourceManager Application Summary Log
 #
 # Set the ResourceManager summary log filename
 yarn.server.resourcemanager.appsummary.log.file=rm-appsummary.log
@@ -207,8 +207,8 @@ yarn.server.resourcemanager.appsummary.log.file=rm-appsummary.log
 yarn.server.resourcemanager.appsummary.logger=${hadoop.root.logger}
 #yarn.server.resourcemanager.appsummary.logger=INFO,RMSUMMARY
 
-# To enable AppSummaryLogging for the RM, 
-# set yarn.server.resourcemanager.appsummary.logger to 
+# To enable AppSummaryLogging for the RM,
+# set yarn.server.resourcemanager.appsummary.logger to
 # <LEVEL>,RMSUMMARY in hadoop-env.sh
 
 # Appender for ResourceManager Application Summary Log
@@ -221,8 +221,8 @@ log4j.logger.org.apache.hadoop.yarn.server.resourcemanager.RMAppManager$Applicat
 log4j.additivity.org.apache.hadoop.yarn.server.resourcemanager.RMAppManager$ApplicationSummary=false
 log4j.appender.RMSUMMARY=org.apache.log4j.RollingFileAppender
 log4j.appender.RMSUMMARY.File=${hadoop.log.dir}/${yarn.server.resourcemanager.appsummary.log.file}
-log4j.appender.RMSUMMARY.MaxFileSize=<%= node.apache_hadoop.log.maxfilesize %>
-log4j.appender.RMSUMMARY.MaxBackupIndex=<%= node.apache_hadoop.log.maxbackupindex %>
+log4j.appender.RMSUMMARY.MaxFileSize=<%= node['apache_hadoop']['log']['maxfilesize'] %>
+log4j.appender.RMSUMMARY.MaxBackupIndex=<%= node['apache_hadoop']['log']['maxbackupindex'] %>
 log4j.appender.RMSUMMARY.layout=org.apache.log4j.PatternLayout
 log4j.appender.RMSUMMARY.layout.ConversionPattern=%d{ISO8601} %p %c{2}: %m%n
 

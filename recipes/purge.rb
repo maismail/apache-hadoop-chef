@@ -24,18 +24,18 @@ EOF
   end
 }
 
-directory "#{node.apache_hadoop.dir}/hadoop-#{node.apache_hadoop.version}" do
+directory "#{node['apache_hadoop']['dir']}/hadoop-#{node['apache_hadoop']['version']}" do
   recursive true
   action :delete
   ignore_failure true
 end
 
-link node.apache_hadoop.home do
+link node['apache_hadoop']['home'] do
   action :delete
   ignore_failure true
 end
 
-directory node.apache_hadoop.data_dir do
+directory node['apache_hadoop']['data_dir'] do
   recursive true
   action :delete
   ignore_failure true
@@ -48,7 +48,7 @@ directory Chef::Config.file_cache_path do
 end
 
 package "Bouncy Castle Remove" do
-  case node.platform
+  case node['platform']
   when 'redhat', 'centos'
     package_name 'bouncycastle'
   when 'ubuntu', 'debian'
@@ -59,7 +59,7 @@ package "Bouncy Castle Remove" do
 end
 
 
-primary_url = node.apache_hadoop.download_url.primary
+primary_url = node['apache_hadoop']['download_url']['primary']
 base_package_filename = File.basename(primary_url)
 cached_package_filename = "/tmp/#{base_package_filename}"
 

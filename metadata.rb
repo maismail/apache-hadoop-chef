@@ -24,6 +24,7 @@ depends 'java'
 depends 'sysctl'
 depends 'cmake'
 depends 'magic_shell'
+depends 'kzookeeper'
 
 %w{ ubuntu debian rhel centos }.each do |os|
   supports os
@@ -185,7 +186,7 @@ attribute "apache_hadoop/capacity/queue_mapping",
 attribute "apache_hadoop/capacity/queue_mapping_override.enable",
           :description => "If a queue mapping is present, will it override the value specified by the user? This can be used by administrators to place jobs in queues that are different than the one specified by the user. The default is false.",
           :type => "string"
-          
+
 attribute "kagent/enabled",
           :description => "Set to 'true' to enable, 'false' to disable kagent",
           :type => "string"

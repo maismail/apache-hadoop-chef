@@ -1,26 +1,26 @@
 
-case node.platform
+case node['platform']
 when "ubuntu"
- if node.platform_version.to_f <= 14.04
-   node.override.apache_hadoop.systemd = "false"
+ if node['platform_version'].to_f <= 14.04
+   node.override['apache_hadoop']['systemd'] = "false"
  end
 end
 
-for script in node.apache_hadoop.dn.scripts
-  template "#{node.apache_hadoop.home}/sbin/#{script}" do
+for script in node['apache_hadoop']['dn']['scripts']
+  template "#{node['apache_hadoop']['home']}/sbin/#{script}" do
     source "#{script}.erb"
-    owner node.apache_hadoop.hdfs.user
-    owner node.apache_hadoop.hdfs.user
-    group node.apache_hadoop.group
+    owner node['apache_hadoop']['hdfs']['user']
+    owner node['apache_hadoop']['hdfs']['user']
+    group node['apache_hadoop']['group']
     mode 0775
   end
 end 
 
 service_name="datanode"
 
-if node.apache_hadoop.systemd == "true"
+if node['apache_hadoop']['systemd'] == "true"
 
-  case node.platform_family
+  case node['platform_family']
   when "rhel"
     systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
   else
@@ -38,7 +38,7 @@ if node.apache_hadoop.systemd == "true"
     owner "root"
     group "root"
     mode 0754
-if node.services.enabled == "true"
+if node['services']['enabled'] == "true"
     notifies :enable, "service[#{service_name}]"
 end
     notifies :restart, "service[#{service_name}]", :immediately
@@ -76,7 +76,7 @@ else #sysv
     owner "root"
     group "root"
     mode 0754
-if node.services.enabled == "true"
+if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => "#{service_name}")
 end
     notifies :restart, resources(:service => "#{service_name}"), :immediately
@@ -84,11 +84,11 @@ end
 
 end
 
-if node.kagent.enabled == "true" 
+if node['kagent']['enabled'] == "true" 
   kagent_config "#{service_name}" do
     service "HDFS"
-    log_file "#{node.apache_hadoop.logs_dir}/hadoop-#{node.apache_hadoop.hdfs.user}-#{service_name}-#{node.hostname}.log"
-    config_file "#{node.apache_hadoop.conf_dir}/hdfs-site.xml"
-    web_port node.apache_hadoop.dn.http_port
+    log_file "#{node['apache_hadoop']['logs_dir']}/hadoop-#{node['apache_hadoop']['hdfs']['user']}-#{service_name}-#{node['hostname']}['log']"
+    config_file "#{node['apache_hadoop']['conf_dir']}/hdfs-site.xml"
+    web_port node['apache_hadoop']['dn']['http_port']
   end
 end

@@ -4,42 +4,42 @@ include_recipe "apache_hadoop::yarn"
 yarn_service="jhs"
 service_name="historyserver"
 
-for script in node.apache_hadoop.yarn.scripts
-  template "#{node.apache_hadoop.home}/sbin/#{script}-#{yarn_service}.sh" do
+for script in node['apache_hadoop']['yarn']['scripts']
+  template "#{node['apache_hadoop']['home']}/sbin/#{script}-#{yarn_service}.sh" do
     source "#{script}-#{yarn_service}.sh.erb"
-    owner node.apache_hadoop.yarn.user
-    group node.apache_hadoop.group
+    owner node['apache_hadoop']['yarn']['user']
+    group node['apache_hadoop']['group']
     mode 0775
   end
 end 
 
 
-tmp_dirs   = ["/mr-history", node.apache_hadoop.jhs.inter_dir, node.apache_hadoop.jhs.done_dir]
+tmp_dirs   = ["/mr-history", node['apache_hadoop']['jhs']['inter_dir'], node['apache_hadoop']['jhs']['done_dir']]
 
  for d in tmp_dirs
    Chef::Log.info "Creating hdfs directory: #{d}"
    apache_hadoop_hdfs_directory d do
     action :create_as_superuser
-    owner node.apache_hadoop.mr.user
-    group node.apache_hadoop.group
+    owner node['apache_hadoop']['mr']['user']
+    group node['apache_hadoop']['group']
     mode "1775"
-    not_if ". #{node.apache_hadoop.home}/sbin/set-env.sh && #{node.apache_hadoop.home}/bin/hdfs dfs -test -d #{d}"
+    not_if ". #{node['apache_hadoop']['home']}/sbin/set-env.sh && #{node['apache_hadoop']['home']}/bin/hdfs dfs -test -d #{d}"
    end
  end
 
-node.normal.mr.dirs = [node.apache_hadoop.mr.staging_dir, node.apache_hadoop.mr.tmp_dir, node.apache_hadoop.hdfs.user_home + "/" + node.apache_hadoop.mr.user]
- for d in node.mr.dirs
+node.normal['mr']['dir']s = [node['apache_hadoop']['mr']['staging_dir'], node['apache_hadoop']['mr']['tmp_dir'], node['apache_hadoop']['hdfs']['user_home'] + "/" + node['apache_hadoop']['mr']['user']]
+ for d in node['mr']['dir']s
    Chef::Log.info "Creating hdfs directory: #{d}"
    apache_hadoop_hdfs_directory d do
     action :create_as_superuser
-    owner node.apache_hadoop.mr.user
-    group node.apache_hadoop.group
+    owner node['apache_hadoop']['mr']['user']
+    group node['apache_hadoop']['group']
     mode "0775"
-    not_if ". #{node.apache_hadoop.home}/sbin/set-env.sh && #{node.apache_hadoop.home}/bin/hdfs dfs -test -d #{d}"
+    not_if ". #{node['apache_hadoop']['home']}/sbin/set-env.sh && #{node['apache_hadoop']['home']}/bin/hdfs dfs -test -d #{d}"
    end
  end
 
-if node.apache_hadoop.systemd == "true"
+if node['apache_hadoop']['systemd'] == "true"
 
   service service_name do
     provider Chef::Provider::Service::Systemd
@@ -47,7 +47,7 @@ if node.apache_hadoop.systemd == "true"
     action :nothing
   end
 
-  case node.platform_family
+  case node['platform_family']
   when "debian"
     systemd_script = "/lib/systemd/system/#{service_name}.service"
   when "rhel"
@@ -59,7 +59,7 @@ if node.apache_hadoop.systemd == "true"
     owner "root"
     group "root"
     mode 0754
-if node.services.enabled == "true"
+if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name)
 end
     notifies :restart, resources(:service => service_name), :immediately
@@ -99,7 +99,7 @@ else #sysv
     owner "root"
     group "root"
     mode 0754
-if node.services.enabled == "true"
+if node['services']['enabled'] == "true"
     notifies :enable, resources(:service => service_name)
 end
     notifies :restart, resources(:service => service_name), :immediately
@@ -107,12 +107,12 @@ end
 
 end
 
-if node.kagent.enabled == "true" 
+if node['kagent']['enabled'] == "true" 
   kagent_config service_name do
     service "MAP_REDUCE"
-    log_file "#{node.apache_hadoop.logs_dir}/mapred-#{node.apache_hadoop.mr.user}-#{service_name}-#{node.hostname}.log"
-    config_file "#{node.apache_hadoop.conf_dir}/mapred-site.xml"
-    web_port node.apache_hadoop["#{yarn_service}"][:http_port]
+    log_file "#{node['apache_hadoop']['logs_dir']}/mapred-#{node['apache_hadoop']['mr']['user']}-#{service_name}-#{node['hostname']}['log']"
+    config_file "#{node['apache_hadoop']['conf_dir']}/mapred-site.xml"
+    web_port node['apache_hadoop']["#{yarn_service}"][:http_port]
   end
 end
 
