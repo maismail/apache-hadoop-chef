@@ -6,7 +6,7 @@ action :start_if_not_running do
   #  service status returns '0' even if the service is not running ;(
   #   if [ `service #{new_resource.name} status` -ne 0 ] ; then
          service #{new_resource.name} restart
- #    fi 
+ #    fi
     EOH
   end
 
@@ -26,7 +26,7 @@ end
 
 
 action :format_nn do
-  if  "#{new_resource['ha_enabled']}".eql? "true"
+  if  "#{new_resource.ha_enabled}".eql? "true"
     bash 'format-nn-ha' do
       user node['apache_hadoop']['hdfs']['user']
       code <<-EOH
@@ -47,7 +47,7 @@ action :format_nn do
 end
 
 action :zkfc do
-  if  "#{new_resource['ha_enabled']}".eql? "true"
+  if  "#{new_resource.ha_enabled}".eql? "true"
     bash 'zookeeper-format' do
       user node['apache_hadoop']['hdfs']['user']
       code <<-EOH
@@ -59,7 +59,7 @@ action :zkfc do
 end
 
 action :standby do
-  if  "#{new_resource['ha_enabled']}".eql? "true"
+  if  "#{new_resource.ha_enabled}".eql? "true"
     bash 'standby' do
       user node['apache_hadoop']['hdfs']['user']
       code <<-EOH
