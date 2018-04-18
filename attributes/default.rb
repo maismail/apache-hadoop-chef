@@ -1,4 +1,5 @@
 include_attribute "kagent"
+include_attribute "kzookeeper"
 
 default['apache_hadoop']['version']                  = "2.7.3"
 default['apache_hadoop']['hdfs']['user']                = "hdfs"
