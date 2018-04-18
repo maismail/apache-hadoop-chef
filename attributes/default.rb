@@ -130,7 +130,7 @@ default['apache_hadoop']['ps']['public_ips']            = ['10.0.2.15']
 default['apache_hadoop']['ps']['private_ips']           = ['10.0.2.15']
 
 # comma-separated list of namenode addrs
-default['apache_hadoop']['nn']['addr']s                 = []
+default['apache_hadoop']['nn']['addrs']                 = []
 
 # build the native libraries. Is much slower, but removes warning when using services.
 default['apache_hadoop']['native_libraries']         = "false"
