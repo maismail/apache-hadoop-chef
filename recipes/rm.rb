@@ -122,7 +122,7 @@ end
 if node['kagent']['enabled'] == "true"
   kagent_config "resourcemanager" do
     service "YARN"
-    log_file "#{node['apache_hadoop']['logs_dir']}/yarn-#{node['apache_hadoop']['yarn']['user']}-#{service_name}-#{node.hostname}['log']"
+    log_file "#{node['apache_hadoop']['logs_dir']}/yarn-#{node['apache_hadoop']['yarn']['user']}-#{service_name}-#{node['hostname']}['log']"
     config_file "#{node['apache_hadoop']['conf_dir']}/yarn-site.xml"
     web_port node['apache_hadoop']["#{yarn_service}"][:http_port]
   end

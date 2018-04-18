@@ -84,7 +84,7 @@ end
 if node['kagent']['enabled'] == "true" 
   kagent_config service_name do
     service "YARN"
-    log_file "#{node['apache_hadoop']['logs_dir']}/yarn-#{node['apache_hadoop']['yarn']['user']}-#{service_name}-#{node.hostname}['log']"
+    log_file "#{node['apache_hadoop']['logs_dir']}/yarn-#{node['apache_hadoop']['yarn']['user']}-#{service_name}-#{node['hostname']}['log']"
     web_port node['apache_hadoop']["#{yarn_service}"][:http_port]
   end
 end
