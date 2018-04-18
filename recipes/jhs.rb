@@ -47,7 +47,7 @@ if node['apache_hadoop']['systemd'] == "true"
     action :nothing
   end
 
-  case node.platform_family
+  case node['platform_family']
   when "debian"
     systemd_script = "/lib/systemd/system/#{service_name}.service"
   when "rhel"

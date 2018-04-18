@@ -1,7 +1,7 @@
 
-case node.platform
+case node['platform']
 when "ubuntu"
- if node.platform_version.to_f <= 14.04
+ if node['platform_version'].to_f <= 14.04
    node.override['apache_hadoop']['systemd'] = "false"
  end
 end
@@ -20,7 +20,7 @@ if node['apache_hadoop']['os_defaults'] == "true" then
   #
   # http://www.slideshare.net/vgogate/hadoop-configuration-performance-tuning
   #
-  case node.platform_family
+  case node['platform_family']
   when "debian"
     bash "configure_os" do
       user "root"
@@ -82,7 +82,7 @@ group node['apache_hadoop']['group'] do
   append true
 end
 
-case node.platform_family
+case node['platform_family']
 when "debian"
   package "openssh-server" do
     action :install
@@ -118,7 +118,7 @@ if node['apache_hadoop']['native_libraries'].eql? "true"
     end
 
   protobuf_lib_prefix = "/usr"
-  case node.platform_family
+  case node['platform_family']
   when "debian"
     package "g++" do
       options "--force-yes"
@@ -344,7 +344,7 @@ end
 
 if node['apache_hadoop']['cgroups'].eql? "true"
 
-  case node.platform_family
+  case node['platform_family']
   when "debian"
     package "libcgroup-dev" do
     end

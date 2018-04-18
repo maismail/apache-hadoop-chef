@@ -1,7 +1,7 @@
 
-case node.platform
+case node['platform']
 when "ubuntu"
- if node.platform_version.to_f <= 14.04
+ if node['platform_version'].to_f <= 14.04
    node.override['apache_hadoop']['systemd'] = "false"
  end
 end
@@ -95,7 +95,7 @@ service_name="namenode"
 
 if node['apache_hadoop']['systemd'] == "true"
 
-  case node.platform_family
+  case node['platform_family']
   when "rhel"
     systemd_script = "/usr/lib/systemd/system/#{service_name}.service" 
   else
