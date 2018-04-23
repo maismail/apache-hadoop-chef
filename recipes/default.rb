@@ -50,7 +50,7 @@ journal_urls=""
 zk_nodes=""
 if ha_enabled == true
   journal_urls="qjournal://" + node['apache_hadoop']['jn']['private_ips'].join(":8485;") + ":8485"
-  zk_nodes=node['kzookeeper'].default['private_ips'].join(":2181,") + ":2181"
+  zk_nodes=node['kzookeeper']['default']['private_ips'].join(":2181,") + ":2181"
 end
 
 
