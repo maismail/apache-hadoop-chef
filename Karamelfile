@@ -1,5 +1,10 @@
 dependencies:
+  - recipe: apache_hadoop::jn
+    global:
+      - kzookeeper::default
   - recipe: apache_hadoop::nn
+    global:
+      - apache_hadoop::jn
   - recipe: apache_hadoop::rm
     global:
       - apache_hadoop::nn
