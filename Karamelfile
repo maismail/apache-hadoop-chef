@@ -9,6 +9,8 @@ dependencies:
     global:
       - apache_hadoop::nn
   - recipe: apache_hadoop::dn
+    global:
+      - apache_hadoop::nn
   - recipe: apache_hadoop::nm
     global:
       - apache_hadoop::rm
