@@ -32,7 +32,7 @@ default['apache_hadoop']['nn']['http_port']             = 50070
 default['apache_hadoop']['dn']['http_port']             = 50075
 default['apache_hadoop']['nn']['port']                  = 8020
 
-default['apache_hadoop']['nn']['format_options']        = "-format -nonInteractive"
+default['apache_hadoop']['nn']['format_options']        = "-format -nonInteractive -force"
 
 default['apache_hadoop']['leader_check_interval_ms'] = 1000
 default['apache_hadoop']['missed_hb']                = 1

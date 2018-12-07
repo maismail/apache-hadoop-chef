@@ -13,7 +13,9 @@ HADOOP_LIBEXEC_DIR=${HADOOP_LIBEXEC_DIR:-$DEFAULT_LIBEXEC_DIR}
 
 log=<%= node['apache_hadoop']['logs_dir'] %>/hadoop-<%= node['apache_hadoop']['hdfs']['user'] %>-$command-$h.log
 
-"$bin"/hadoop-daemon.sh --config $HADOOP_CONF_DIR --script hdfs $command -bootstrapStandby -force
+"$bin"/../bin/hdfs --config $HADOOP_CONF_DIR $command -bootstrapStandby -force
+"$bin"/hadoop-daemon.sh --config $HADOOP_CONF_DIR start $command
+
 sleep 2; head "$log"
 
 PID_FILE=$HADOOP_PID_DIR/hadoop-<%= node['apache_hadoop']['hdfs']['user'] %>-$command.pid

@@ -23,7 +23,15 @@ action :systemd_reload do
 
 end
 
-
+action :start_active_nn do
+  bash 'start-active-nn' do
+    user node['apache_hadoop']['hdfs']['user']
+    code <<-EOH
+      set -e
+      #{node['apache_hadoop']['base_dir']}/sbin/hadoop-daemon.sh start namenode
+EOH
+  end
+end
 
 action :format_nn do
   if  "#{new_resource.ha_enabled}".eql? "true"
@@ -48,11 +56,11 @@ end
 
 action :zkfc do
   if  "#{new_resource.ha_enabled}".eql? "true"
-    bash 'zookeeper-format' do
+    bash 'start-zookeeper' do
       user node['apache_hadoop']['hdfs']['user']
       code <<-EOH
         set -e
-        #{node['apache_hadoop']['base_dir']}/bin/hdfs zkfc -formatZK -force
+        #{node['apache_hadoop']['base_dir']}/sbin/hadoop-daemon.sh start zkfc
  	EOH
     end
   end
@@ -64,7 +72,8 @@ action :standby do
       user node['apache_hadoop']['hdfs']['user']
       code <<-EOH
         set -e
-        #{node['apache_hadoop']['base_dir']}/sbin/start-standby-nn.sh
+        #{node['apache_hadoop']['base_dir']}/bin/hdfs namenode -bootstrapStandby -force
+        #{node['apache_hadoop']['base_dir']}/sbin/hadoop-daemon.sh start namenode
  	EOH
     end
   end
