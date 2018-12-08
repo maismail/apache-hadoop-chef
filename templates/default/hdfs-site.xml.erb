@@ -13,16 +13,6 @@
 </property>
 
 <property>
-  <name>dfs.client.max.retires.on.failure</name>
-  <value>1</value>
-</property>
-
-<property>
-  <name>dfs.client.refresh.namenode.list</name>
-  <value>60000</value>
-</property>
-
-<property>
   <name>dfs.namenode.name.dir</name>
   <value><%= node['apache_hadoop']['nn']['name_dir'] %></value>
 </property>
@@ -34,13 +24,36 @@
 
 
 <property>
-  <name>dfs.client.block.write.locateFollowingBlock.retries</name>
-  <value>10</value>
+  <name>dfs.webhdfs.enabled</name>
+  <value>true</value>
 </property>
 
 <property>
-  <name>dfs.webhdfs.enabled</name>
-  <value>true</value>
+   <name>dfs.namenode.handler.count</name>
+  <value>240</value>
+  <description>The RPC server that listens to requests from clients</description>
+</property>
+
+<property>
+   <name>dfs.namenode.service.handler.count</name>
+  <value>80</value>
+  <description>The RPC server threads that listens to requests from DataNodes</description>
+</property>
+
+<property>
+    <name>dfs.datanode.max.transfer.threads</name>
+    <value>8000</value>
+    <description>default 4096</description>
+</property>
+
+<property>
+  <name>dfs.namenode.logging.level</name>
+  <value><%= node['apache_hadoop']['logging_level'] %></value>
+  <description>
+    The logging level for dfs namenode. Other values are "dir" (trace
+    namespace mutations), "block" (trace block under/over replications
+    and block creations/deletions), or "all".
+  </description>
 </property>
 
 </configuration>
